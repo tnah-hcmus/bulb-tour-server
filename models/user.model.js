@@ -52,6 +52,7 @@ module.exports = (sequelize, Sequelize) => {
           return this.getDataValue("favouriteLocations")?.split(";") || [];
         },
         set(val) {
+          if (Array.isArray(val)) val = new Set(val);
           this.setDataValue("favouriteLocations", Array.from(val).join(";"));
         },
       },

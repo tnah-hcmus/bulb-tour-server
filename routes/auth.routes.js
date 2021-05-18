@@ -8,18 +8,20 @@ router.post(
   authController.authenticateSchema,
   authController.authenticate
 );
-router.get("/oauth/google", authController.getOAuthInfo);
-router.post(
-  "/oauth/google",
-  authController.loginWithThirdPartySchema,
-  authController.loginWithThirdParty
-);
-router.get("/oauth/facebook", authController.getOAuthInfo);
-router.post(
-  "/oauth/facebook",
-  authController.loginWithThirdPartySchema,
-  authController.loginWithThirdParty
-);
+router
+  .get("/oauth/google", authController.getOAuthInfo)
+  .post(
+    "/oauth/google",
+    authController.loginWithThirdPartySchema,
+    authController.loginWithThirdParty
+  );
+router
+  .get("/oauth/facebook", authController.getOAuthInfo)
+  .post(
+    "/oauth/facebook",
+    authController.loginWithThirdPartySchema,
+    authController.loginWithThirdParty
+  );
 router.post("/refresh-token", authController.refreshToken);
 router.post(
   "/change-password",

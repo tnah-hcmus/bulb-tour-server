@@ -13,6 +13,9 @@ module.exports = (sequelize, Sequelize) => {
         },
       },
     },
+    picture: {
+      type: Sequelize.STRING,
+    },
     status: {
       //0 in progress, //1 done, //2 interupted
       type: Sequelize.INTEGER,
@@ -39,6 +42,7 @@ module.exports = (sequelize, Sequelize) => {
         return this.getDataValue("locations")?.split(";") || [];
       },
       set(val) {
+        if (Array.isArray(val)) val = new Set(val);
         this.setDataValue("locations", Array.from(val).join(";"));
       },
     },

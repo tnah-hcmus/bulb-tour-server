@@ -12,7 +12,25 @@ module.exports = {
   updateSchema,
   update,
   delete: _delete,
+  updatePicturesSchema,
+  updatePictures
 };
+
+function updatePicturesSchema(req, res, next) {
+  const schema = Joi.object({
+    operation: Joi.string().required(),
+    uploadId: Joi.string().required(),
+    reviewId: Joi.integer().required()
+  });
+  validateRequest(req, next, schema);
+}
+
+function updatePictures(req, res, next) {
+  req.body.userId = req.user.id;
+  reviewHelper.updatePictures(req.body)
+  .then((result) => res.send(result))
+  .catch(next);
+}
 
 function getByLocationId(req, res, next) {
   if (!req.query.location) {
@@ -49,6 +67,9 @@ function createSchema(req, res, next) {
     ownerId: Joi.number().required(),
     locationId: Joi.number().required(),
     rating: Joi.number().required(),
+    text: Joi.string(),
+    canEditRating: Joi.boolean(),
+    pictures: Joi.array(),
   });
   validateRequest(req, next, schema);
 }
@@ -65,6 +86,9 @@ function updateSchema(req, res, next) {
     ownerId: Joi.number().empty(/.*/),
     locationId: Joi.number().empty(/.*/),
     canEditRating: Joi.boolean().empty(/.*/),
+    text: Joi.string(),
+    pictures: Joi.array(),
+    rating: Joi.number(),
   };
 
   const schema = Joi.object(schemaRules);

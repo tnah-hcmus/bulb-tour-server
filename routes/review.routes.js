@@ -4,6 +4,13 @@ const authorize = require("middleware/authorize");
 const reviewController = require("controllers/review/review.controller");
 
 router
+  .route("/pictures")
+  .post(
+    authorize(),
+    reviewController.updatePicturesSchema,
+    reviewController.updatePictures
+  );
+router
   .route("/single/:id")
   .get(reviewController.getById)
   .put(authorize(), reviewController.updateSchema, reviewController.update)

@@ -34,6 +34,7 @@ module.exports = (sequelize, Sequelize) => {
           return this.getDataValue("pictures")?.split(";") || [];
         },
         set(val) {
+          if (Array.isArray(val)) val = new Set(val);
           this.setDataValue("pictures", Array.from(val).join(";"));
         },
       },

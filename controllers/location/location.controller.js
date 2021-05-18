@@ -50,6 +50,15 @@ function createSchema(req, res, next) {
     lat: Joi.string().required(),
     long: Joi.string().required(),
     type: Joi.string().required(),
+    shortDesc: Joi.string(),
+    longDesc: Joi.string(),
+    phone: Joi.string(),
+    web: Joi.string(),
+    rating: Joi.number(),
+    ratingNumber: Joi.number(),
+    openTime: Joi.number(),
+    closeTime: Joi.number(),
+    pictures: Joi.array(),
   });
   validateRequest(req, next, schema);
 }

@@ -9,16 +9,6 @@ module.exports = {
   getNearby
 };
 
-async function getNearby({lat, long}) {
-  try {
-    const locations = await Location.findAll();
-    return locations
-  }
-  catch(err) {
-    err
-  }
-}
-
 async function create(params) {
   try {
     const location = new Location(params);
@@ -26,24 +16,6 @@ async function create(params) {
     await location.save();
     return location;
   } catch (err) {
-    throw err;
-  }
-}
-
-async function updateRating(id, rating, isNew, oldRating) {
-  try {
-    const location = await getByLocationId(id);
-    const totalRating = location.rating*location.ratingNumber;
-    if(isNew) {
-      location.rating = (totalRating + rating)/(location.ratingNumber+1);
-      location.ratingNumber++;
-    } else {
-      location.rating = (totalRating + rating - oldRating)/location.ratingNumber;
-    }
-    await location.save();
-
-  }
-  catch(err) {
     throw err;
   }
 }
@@ -73,6 +45,32 @@ async function getByLocationId(id) {
     const location = await Location.findByPk(id);
     if (!location) throw "Location not found";
     return location;
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function getNearby({ lat, long }) {
+  try {
+    const locations = await Location.findAll();
+    return locations;
+  } catch (err) {
+    err;
+  }
+}
+
+async function updateRating(id, rating, isNew, oldRating) {
+  try {
+    const location = await getByLocationId(id);
+    const totalRating = location.rating * location.ratingNumber;
+    if (isNew) {
+      location.rating = (totalRating + rating) / (location.ratingNumber + 1);
+      location.ratingNumber++;
+    } else {
+      location.rating =
+        (totalRating + rating - oldRating) / location.ratingNumber;
+    }
+    await location.save();
   } catch (err) {
     throw err;
   }

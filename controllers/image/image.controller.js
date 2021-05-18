@@ -51,6 +51,8 @@ function createSchema(req, res, next) {
     ownerId: Joi.integer().required(),
     bucket: Joi.string().required(),
     key: Joi.string().required(),
+    isThumbnail: Joi.boolean(),
+    secure: Joi.boolean(),
   });
   validateRequest(req, next, schema);
 }

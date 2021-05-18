@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
   const Upload = sequelize.define("uploads", {
     uploadId: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       primaryKey: true,
     },
     fileName: {
@@ -9,11 +9,11 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     imageId: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: false,
     },
     thumbnailId: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: false,
     },
   });

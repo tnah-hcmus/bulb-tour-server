@@ -51,6 +51,10 @@ function createSchema(req, res, next) {
     password: Joi.string().min(6).required(),
     confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
     role: Joi.string().valid(Role.Admin, Role.User).required(),
+    pointBaseLevel: Joi.number(),
+    point: Joi.number(),
+    avatar: Joi.string(),
+    favouriteLocations: Joi.array(),
   });
   validateRequest(req, next, schema);
 }
@@ -69,12 +73,16 @@ function updateSchema(req, res, next) {
     email: Joi.string().email().empty(/.*/),
     password: Joi.string().min(6).empty(/.*/),
     confirmPassword: Joi.string().valid(Joi.ref("password")).empty(/.*/),
+    pointBaseLevel: Joi.number(),
+    point: Joi.number(),
+    avatar: Joi.string(),
+    favouriteLocations: Joi.array(),
   };
 
   // only admins can update role
   if (req.user.role === Role.Admin) {
     schemaRules.role = Joi.string().valid(Role.Admin, Role.User).empty(/.*/);
-  }
+  } else schemaRules.role = Joi.string().valid(Role.Admin, Role.User);
 
   const schema = Joi.object(schemaRules).with("password", "confirmPassword");
   validateRequest(req, next, schema);

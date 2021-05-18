@@ -5,14 +5,6 @@ const Role = require("helper/role");
 const imageController = require("controllers/image/image.controller");
 
 router
-  .route("/")
-  .get(authorize(), imageController.getByUserId)
-  .post(
-    authorize(Role.Admin),
-    imageController.createSchema,
-    imageController.create
-  );
-router
   .route("/single/:id")
   .get(authorize(), imageController.getById)
   .put(
@@ -20,6 +12,13 @@ router
     imageController.updateSchema,
     imageController.update
   )
-  .delete(authorize(Role.Admin), imageController.delete);
-
+  .delete(authorize(), imageController.delete);
+router
+  .route("/")
+  .get(authorize(), imageController.getByUserId)
+  .post(
+    authorize(Role.Admin),
+    imageController.createSchema,
+    imageController.create
+  );
 module.exports = router;

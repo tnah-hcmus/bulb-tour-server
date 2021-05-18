@@ -7,14 +7,6 @@ module.exports = {
   getById,
 };
 
-async function getByUserId(id) {
-  try {
-    return await Image.findAll({ where: { ownerId: id, isThumbnail: false } });
-  } catch (err) {
-    throw err;
-  }
-}
-
 async function create(params) {
   try {
     const image = new Image(params);
@@ -58,6 +50,14 @@ async function getById(id, userId) {
         throw "You don't have permission to view this image";
     }
     return image;
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function getByUserId(id) {
+  try {
+    return await Image.findAll({ where: { ownerId: id, isThumbnail: false } });
   } catch (err) {
     throw err;
   }

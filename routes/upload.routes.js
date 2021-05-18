@@ -5,10 +5,6 @@ const Role = require("helper/role");
 const uploadController = require("controllers/upload/upload.controller");
 
 router
-  .route("/")
-  .get(authorize(), uploadController.init)
-  .post(authorize(), uploadController.createSchema, uploadController.create);
-router
   .route("/single/:id")
   .get(authorize(), uploadController.getById)
   .put(
@@ -17,5 +13,9 @@ router
     uploadController.update
   )
   .delete(authorize(Role.Admin), uploadController.delete);
+router
+  .route("/")
+  .get(authorize(), uploadController.init)
+  .post(authorize(), uploadController.createSchema, uploadController.create);
 
 module.exports = router;

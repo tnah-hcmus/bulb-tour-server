@@ -4,6 +4,13 @@ const authorize = require("middleware/authorize");
 const Role = require("helper/role");
 const userController = require("controllers/user/user.controller");
 const uploadController = require("controllers/upload/upload.controller");
+
+router
+  .route("/single/:id")
+  .get(authorize(), userController.getById)
+  .post(authorize(), userController.updateSchema, userController.update)
+  .put(authorize(), userController.updateSchema, userController.update)
+  .delete(authorize(Role.Admin), userController.delete);
 router
   .route("/avatar")
   .get(authorize(), uploadController.init)
@@ -33,10 +40,4 @@ router
     userController.createSchema,
     userController.create
   );
-router
-  .route("/single/:id")
-  .get(authorize(), userController.getById)
-  .post(authorize(), userController.updateSchema, userController.update)
-  .put(authorize(), userController.updateSchema, userController.update)
-  .delete(authorize(Role.Admin), userController.delete);
 module.exports = router;

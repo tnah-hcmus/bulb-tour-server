@@ -8,6 +8,7 @@ module.exports = {
   update,
   delete: _delete,
   getByReviewId,
+  updatePictures,
 };
 
 async function getByLocationId(id) {
@@ -86,6 +87,32 @@ async function getByReviewId(id) {
     const review = await Review.findByPk(id);
     if (!review) throw "Review not found";
     return review;
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function updatePictures({ operation, uploadId, reviewId, userId }) {
+  if (!userId) throw { name: "UnauthorizedError" };
+  if(!operation || !reviewId) throw 'Invalid params';
+  if (operation !== 'RESET' && (!uploadId)) throw 'Missing uploadId';
+  try {
+    const review = await getByReviewId(reviewId);
+    if(review.ownerId !== userId) throw { name: "UnauthorizedError" };
+    const preValue = new Set(review.pictures);
+    switch (operation) {
+      case "ADD":
+        review.pictures = preValue.add(uploadId);
+        break;
+      case "REMOVE":
+        review.pictures = preValue.delete(uploadId);
+        break;
+      case "RESET":
+        review.pictures = new Set([]);
+        break;
+    }
+    await review.save();
+    return "Success update review's picture";
   } catch (err) {
     throw err;
   }

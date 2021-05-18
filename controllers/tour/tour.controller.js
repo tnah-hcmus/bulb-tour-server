@@ -42,6 +42,10 @@ function createSchema(req, res, next) {
     currentLocation: Joi.number().required(),
     locations: Joi.array().required(),
     started: Joi.date().required(),
+    rating: Joi.integer(),
+    status: Joi.integer(),
+    picture: Joi.string(),
+    end: Joi.date(),
   });
   validateRequest(req, next, schema);
 }
@@ -58,6 +62,11 @@ function updateSchema(req, res, next) {
     ownerId: Joi.number().empty(/.*/),
     locations: Joi.array().empty(/.*/),
     started: Joi.date().empty(/.*/),
+    rating: Joi.integer(),
+    status: Joi.integer(),
+    picture: Joi.string(),
+    end: Joi.date(),
+    currentLocation: Joi.number(),
   };
 
   // only admins can update specified field
