@@ -50,6 +50,16 @@ async function getByLocationId(id) {
   }
 }
 
+async function getByHash(hash) {
+	try {
+		const locations = await Location.findAll({ where: { hash } });
+		if (!locations) throw "Location not found";
+		return locations;
+	} catch (err) {
+		throw err;
+	}
+}
+
 async function getNearby({ lat, long }) {
   try {
     const locations = await Location.findAll();

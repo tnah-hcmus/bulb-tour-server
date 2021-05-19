@@ -78,7 +78,21 @@ module.exports = (sequelize, Sequelize) => {
         },
       },
     },
-    { timestamps: false }
+    { timestamps: false ,
+      indexes:[
+        {
+          fields:['hash']
+        },
+        {
+          name: 'rate_index',
+          using: 'BTREE',
+          fields: [
+            'rating',
+          ]
+        }
+      ]
+    }
+    
   );
 
   return Location;

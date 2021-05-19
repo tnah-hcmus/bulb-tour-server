@@ -17,17 +17,27 @@ module.exports = (sequelize, Sequelize) => {
       // include hash with this scope
       withHash: { attributes: {} },
     },
+    indexes:[
+      {
+        unique: true,
+        fields:['email']
+      },
+      {
+        unique: true,
+        fields:['username']
+      }
+    ]
   };
   const User = sequelize.define(
     "users",
     {
       email: {
         type: Sequelize.STRING,
-        unique: true,
+        // unique: true,
       },
       username: {
         type: Sequelize.STRING,
-        unique: true,
+        // unique: true,
       },
       passwordHash: {
         type: Sequelize.STRING,
