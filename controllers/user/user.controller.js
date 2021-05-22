@@ -73,6 +73,7 @@ function updateSchema(req, res, next) {
     email: Joi.string().email().empty(/.*/),
     password: Joi.string().min(6).empty(/.*/),
     confirmPassword: Joi.string().valid(Joi.ref("password")).empty(/.*/),
+    name: Joi.string(),
     pointBaseLevel: Joi.number(),
     point: Joi.number(),
     avatar: Joi.string(),
