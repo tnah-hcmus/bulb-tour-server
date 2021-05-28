@@ -14,7 +14,6 @@ module.exports = (sequelize, Sequelize) => {
     },
     thumbnailId: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
   });
   return Upload;

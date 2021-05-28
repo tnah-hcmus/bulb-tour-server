@@ -23,7 +23,7 @@ function getById(req, res, next) {
 
 async function init(req, res, next) {
   req.body.number = req.body.number || 1;
-  req.body.createThumbnail = req.body.createThumbnail === 'undefined' ? true : req.body.createThumbnail;
+  req.body.createThumbnail = req.body.createThumbnail == false ? false : true;
   try {
     let allUrlPromise = [];
     for (let i = 0; i < req.body.number; i++) {
