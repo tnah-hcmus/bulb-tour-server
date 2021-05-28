@@ -120,7 +120,7 @@ async function updateAvatar(req, res, next) {
   try {
     req.body.uploadId = createUUID();
     const upload = await uploadHelper.create(req.body, req.user.id);
-    let account = await userHelper.update(req.user.id, { avatar: upload.id });
+    let account = await userHelper.update(req.user.id, { avatar: req.body.uploadId });
     const urls = await Promise.all([
       getSignedUrlForGetImage(upload.imageId),
       getSignedUrlForGetImage(upload.thumbnailId),
