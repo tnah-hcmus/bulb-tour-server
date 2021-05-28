@@ -10,7 +10,7 @@ const s3 = new aws.S3({
 
 const getSignedUrlForGetImage = (
   key,
-  bucketName = bucket,
+  bucketName = process.env.BUCKET,
   expires = 3600
 ) => {
   return new Promise((resolve, reject) => {
