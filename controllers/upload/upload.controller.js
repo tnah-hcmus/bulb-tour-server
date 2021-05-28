@@ -41,7 +41,7 @@ function createSchema(req, res, next) {
     fileName: Joi.string().required(),
     uploadId: Joi.string().required(),
     imageId: Joi.string().required(),
-    thumbnailId: Joi.string().required(),
+    thumbnailId: Joi.string(),
   });
   validateRequest(req, next, schema);
 }
