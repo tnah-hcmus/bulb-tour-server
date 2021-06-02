@@ -41,10 +41,10 @@ router.post(
   authController.register
 );
 router.post(
-  "/verify-email",
-  authController.verifyEmailSchema,
-  authController.verifyEmail
-);
+    "/verify-email",
+    authController.verifyEmailSchema,
+    authController.verifyEmail
+  );
 router.post(
   "/forgot-password",
   authController.forgotPasswordSchema,

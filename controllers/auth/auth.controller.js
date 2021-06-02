@@ -172,17 +172,20 @@ function verifyCaptcha(req, res, next) {
 
 function verifyEmailSchema(req, res, next) {
   const schema = Joi.object({
-    token: Joi.string().required(),
+    token: Joi.string(),
   });
   validateRequest(req, next, schema);
 }
 
 function verifyEmail(req, res, next) {
+  const token = req.query.token || req.body.token;
+  if(!token) res.status(400).send('Invalid params');
   authHelper
-    .verifyEmail(req.body)
-    .then(() =>
-      res.json({ message: "Verification successful, you can login now" })
-    )
+    .verifyEmail({token})
+    .then(() => {
+      if(req.body.token) res.json({ message: "Verification successful, you can login now" })
+      else res.redirect('/verified');
+    })
     .catch(next);
 }
 

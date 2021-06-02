@@ -43,10 +43,15 @@ app.use("/api/locations", require("routes/location.routes"));
 app.use("/api/reviews", require("routes/review.routes"));
 app.use("/api/tours", require("routes/tour.routes"));
 app.use("/api/uploads", require("routes/upload.routes"));
-
-app.use((req, res, next) => {
+app.use("/api/:path", (req, res, next) => {
   res.status(403).send('You don\'t have permission to view this source');
 });
+app.use("/", require("routes/public.routes"));
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname,'public/404.html'));
+});
+
+
 // global error handler
 app.use(errorHandler);
 

@@ -200,14 +200,14 @@ async function register(params, origin) {
     account.rawPassword = params.password;
 
     //ignore mail
-    account.verified = Date.now();
+    //account.verified = Date.now();
 
     // save account
     await account.save();
+    // send email
+    await sendVerificationEmail(account, origin);
 
     return account;
-    // send email
-    // await sendVerificationEmail(account, origin);
   } catch (err) {
     throw err;
   }
@@ -323,7 +323,7 @@ async function sendVerificationEmail(account, origin) {
   try {
     let message;
     if (origin) {
-      const verifyUrl = `${origin}/api/auth/verify-email?token=${account.verificationToken}`;
+      const verifyUrl = `${origin}/auth/verify-email?token=${account.verificationToken}`;
       message = `<p>Please click the below link to verify your email address:</p>
                    <p><a href="${verifyUrl}">${verifyUrl}</a></p>`;
     } else {
@@ -368,7 +368,7 @@ async function sendPasswordResetEmail(account, origin) {
   try {
     let message;
     if (origin) {
-      const resetUrl = `${origin}/api/auth/reset-password?token=${account.resetToken}`;
+      const resetUrl = `${origin}/auth/reset-password?token=${account.resetToken}`;
       message = `<p>Please click the below link to reset your password, the link will be valid for 1 day:</p>
                    <p><a href="${resetUrl}">${resetUrl}</a></p>`;
     } else {
