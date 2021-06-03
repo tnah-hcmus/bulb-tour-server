@@ -33,9 +33,9 @@
             })
             .then(response => response.json())
             .then((data) => {
+              console.log(data);
               document.location.href = '/done-reset';
             }).catch((err) => {
-              alert('Error', err);
               showError(err);
             });
         } 
