@@ -26,7 +26,14 @@
         } else {
           fetch('/api/auth/reset-password', {
             method: 'post',
+<<<<<<< HEAD
             body: {token, password: form.pwd.value, confirmPassword: form.confirmPwd.value}
+=======
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({token, password: form.pwd.value, confirmPassword: form.confirmPwd.value})
+>>>>>>> 9bd75672be101d1604dae7aee43f7c50d0cf7576
             })
             .then(response => response.json())
             .then((data) => {
