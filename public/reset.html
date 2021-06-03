@@ -13,6 +13,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Open+Sans&family=Space+Mono&family=Montserrat&display=swap" rel="stylesheet"> 
     <title>Reset password</title>
     <script>
+      function errTranslate(errMsg) {
+        errMsg = errMsg.replaceAll("Validation error: ", '');
+        errMsg = errMsg.replaceAll('\"token\"', 'token');
+        errMsg = errMsg.replaceAll('\"password\"', 'password');
+        errMsg = errMsg.replaceAll('\"confirmPassword\"', 'confirmPassword');
+        return errMsg;
+      }
+      function handleErrors(response) {
+          if (!response.ok) {
+              throw Error(response.statusText);
+          }
+          return response.json();
+      }
       function submitForm(e, form){
         e.preventDefault();
         const urlParams = new URLSearchParams(window.location.search);
@@ -20,10 +33,13 @@
         const password = form.pwd.value;
         const confirmPassword = form.confirmPwd.value;
         if(!token || !password || !confirmPassword) {
-          showError('Không đủ dữ liệu để thực hiện yêu cầu của bạn');
+          showError('Not enough information to request');
         } else if(password !== confirmPassword) {
-          showError('Mật khẩu không khớp, vui lòng kiểm tra lại');
-        } else {
+          showError('Password not match, please check');
+        } else if(password.length < 6) {
+          showError('Password must be more then 6 character');
+        }
+        else {
           fetch('/api/auth/reset-password', {
             method: 'post',
             headers: {
@@ -31,12 +47,11 @@
             },
             body: JSON.stringify({token, password: form.pwd.value, confirmPassword: form.confirmPwd.value})
             })
-            .then(response => response.json())
+            .then(handleErrors)
             .then((data) => {
-              console.log(data);
               document.location.href = '/done-reset';
             }).catch((err) => {
-              showError(err);
+              showError(errTranslate(err));
             });
         } 
       }
@@ -63,9 +78,9 @@
         <div class = 'main-text'>
           <h3 class = 'text'>Đặt lại mật khẩu của bạn</h3>
           <form class="form-inline" onsubmit="submitForm(event, this)">
-            <input type="password" id="pwd" placeholder="Nhập mật khẩu mới" name="pwd" onfocus="hideError">
+            <input type="password" id="pwd" placeholder="Nhập mật khẩu mới" name="pwd" onfocus="hideError(event,this)">
             <p id="error" class="error-text"></p>
-            <input type="password" id="confirmPwd" placeholder="Nhập lại mật khẩu mới" name="confirmPwd" onfocus="hideError">
+            <input type="password" id="confirmPwd" placeholder="Nhập lại mật khẩu mới" name="confirmPwd" onfocus="hideError(event,this)">
             <button class='back-button'>Đổi mật khẩu </button>
           </form>
         </div>        
