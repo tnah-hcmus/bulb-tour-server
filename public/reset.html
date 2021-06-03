@@ -26,10 +26,10 @@
         } else {
           fetch('/api/auth/reset-password', {
             method: 'post',
-            body: JSON.stringify({token, password: form.pwd.value, confirmPassword: form.confirmPwd.value})
+            body: {token, password: form.pwd.value, confirmPassword: form.confirmPwd.value}
             })
+            .then(response => response.json())
             .then((data) => {
-              alert('form submited', data);
               document.location.href = '/done-reset';
             }).catch((err) => {
               alert('Error', err);
