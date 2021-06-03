@@ -29,7 +29,7 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            body: {token, password: form.pwd.value, confirmPassword: form.confirmPwd.value}
+            body: JSON.stringify({token, password: form.pwd.value, confirmPassword: form.confirmPwd.value})
             })
             .then(response => response.json())
             .then((data) => {
