@@ -1,11 +1,11 @@
 module.exports = {
-  emailFrom: "info@adsbreak.com",
+  emailFrom: "tnah@bulbtour.com",
   smtpOptions: {
-    host: "smtp.ethereal.email",
+    host: "smtp.gmail.com",
     port: 587,
     auth: {
-      user: "keon.brekke36@ethereal.email",
-      pass: "kDvX6ChnERjMpQn9u6",
+      user: "yellowdragon1999qn@gmail.com",
+      pass: process.env.MAIL_PASS,
     },
   },
 };
