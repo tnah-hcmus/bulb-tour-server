@@ -14,7 +14,7 @@ const {
   getFacebookUserData,
   getFacebookUrl,
 } = require("helper/facebook-utils");
-
+const { Op } = require("sequelize");
 module.exports = {
   authenticate,
   getThirdPartyUrlInfo,
