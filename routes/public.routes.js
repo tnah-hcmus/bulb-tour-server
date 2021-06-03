@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("controllers/auth/auth.controller");
-
+const path = require('path')
 router.get("/auth/verify-email",
     authController.verifyEmailSchema,
     authController.verifyEmail
