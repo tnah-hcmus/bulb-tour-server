@@ -183,7 +183,7 @@ function verifyEmail(req, res, next) {
   authHelper
     .verifyEmail({token})
     .then(() => {
-      if(req.body.token) res.json({ message: "Verification successful, you can login now" })
+      if(req.method === "POST") res.json({ message: "Verification successful, you can login now" })
       else res.redirect('/verified');
     })
     .catch(next);
