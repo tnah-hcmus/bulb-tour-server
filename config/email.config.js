@@ -1,4 +1,4 @@
-const xoauth = require('xoauth2')
+const xoauth2 = require('xoauth2')
 module.exports = {
   emailFrom: "tnah@bulbtour.com",
   smtpOptions: {
