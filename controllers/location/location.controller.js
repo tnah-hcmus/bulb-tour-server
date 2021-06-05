@@ -36,9 +36,9 @@ function getById(req, res, next) {
   locationHelper
     .getByLocationId(req.params.id)
     .then((location) => {
-      if (location.userId !== req.user.id && req.user.role !== Role.Admin) {
-        return res.status(401).json({ message: "Unauthorized" });
-      }
+      // if (location.userId !== req.user.id && req.user.role !== Role.Admin) {
+      //   return res.status(401).json({ message: "Unauthorized" });
+      // }
       return location ? res.json(location) : res.sendStatus(404);
     })
     .catch(next);
