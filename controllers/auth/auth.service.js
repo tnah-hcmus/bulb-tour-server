@@ -319,17 +319,16 @@ function randomTokenString() {
   return crypto.randomBytes(40).toString("hex");
 }
 
-async function sendVerificationEmail(account, origin) {
+async function sendVerificationEmail(account, origin = 'http://174.138.28.27') {
   try {
     let message;
     if (origin) {
       const verifyUrl = `${origin}/auth/verify-email?token=${account.verificationToken}`;
       message = `<p>Please click the below link to verify your email address:</p>
                    <p><a href="${verifyUrl}">${verifyUrl}</a></p>`;
-    } else {
-      message = `<p>Please use the below token to verify your email address with the <code>/account/verify-email</code> api route:</p>
+    } 
+    message += `<p>If you are developer. Please use the below token to verify your email address with the <code>/account/verify-email</code> api route:</p>
                    <p><code>${account.verificationToken}</code></p>`;
-    }
 
     await sendEmail({
       to: account.email,
@@ -343,14 +342,13 @@ async function sendVerificationEmail(account, origin) {
   }
 }
 
-async function sendAlreadyRegisteredEmail(email, origin) {
+async function sendAlreadyRegisteredEmail(email, origin = 'http://174.138.28.27') {
   try {
     let message;
     if (origin) {
       message = `<p>If you don't know your password please visit the <a href="${origin}/api/auth/forgot-password">forgot password</a> page.</p>`;
-    } else {
-      message = `<p>If you don't know your password you can reset it via the <code>/api/auth/forgot-password</code> api route.</p>`;
-    }
+    } 
+    message += `<p>If you are developer. If you don't know your password you can reset it via the <code>/api/auth/forgot-password</code> api route.</p>`;
 
     await sendEmail({
       to: email,
@@ -364,17 +362,16 @@ async function sendAlreadyRegisteredEmail(email, origin) {
   }
 }
 
-async function sendPasswordResetEmail(account, origin) {
+async function sendPasswordResetEmail(account, origin = 'http://174.138.28.27') {
   try {
     let message;
     if (origin) {
       const resetUrl = `${origin}/auth/reset-password?token=${account.resetToken}`;
       message = `<p>Please click the below link to reset your password, the link will be valid for 1 day:</p>
                    <p><a href="${resetUrl}">${resetUrl}</a></p>`;
-    } else {
-      message = `<p>Please use the below token to reset your password with the <code>/api/auth/reset-password</code> api route:</p>
-                   <p><code>${account.resetToken}</code></p>`;
     }
+    message = `<p>If you are developer. Please use the below token to reset your password with the <code>/api/auth/reset-password</code> api route:</p>
+                   <p><code>${account.resetToken}</code></p>`;
 
     await sendEmail({
       to: account.email,
