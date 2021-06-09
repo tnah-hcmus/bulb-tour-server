@@ -9,7 +9,7 @@ const {
   fullDetails,
   getAccount,
 } = require("controllers/user/user.service.js");
-const { getGoogleAccountFromCode, urlGoogle } = require("helper/google-utils");
+const { getGoogleAccountFromCode, urlGoogle, loginWithIdToken } = require("helper/google-utils");
 const {
   getFacebookUserData,
   getFacebookUrl,
@@ -56,7 +56,7 @@ async function loginWithThirdParty({ email, password, name, ipAddress }) {
       await refreshToken.save();
     }
     return {
-      ...fullDetails(find),
+      ...fullDetails(account),
       jwtToken,
       refreshToken: refreshToken.token,
     };
@@ -65,9 +65,10 @@ async function loginWithThirdParty({ email, password, name, ipAddress }) {
   }
 }
 
-async function loginWithGoogle({ code, ipAddress }) {
+async function loginWithGoogle({ idToken, ipAddress }) {
   try {
-    const { email, password, name } = await getGoogleAccountFromCode(code);
+    // const { email, password, name } = await getGoogleAccountFromCode(code);
+    const {email, password, name } = await loginWithIdToken(idToken);
     return await loginWithThirdParty({ email, password, name, ipAddress });
   } catch (err) {
     throw err;

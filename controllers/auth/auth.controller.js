@@ -49,17 +49,19 @@ function authenticate(req, res, next) {
 
 function loginWithThirdPartySchema(req, res, next) {
   const schema = Joi.object({
-    code: Joi.string().required(),
+    code: Joi.string(),
+    idToken: Joi.string()
   });
   validateRequest(req, next, schema);
 }
 
 function loginWithThirdParty(req, res, next) {
-  const { code } = req.body;
+  const { code, idToken } = req.body;
   const ipAddress = req.ip;
   let promisedAccount = null;
+  console.log("Here")
   if (req.url.includes("google"))
-    promisedAccount = authHelper.loginWithGoogle({ code, ipAddress });
+    promisedAccount = authHelper.loginWithGoogle({ idToken, ipAddress });
   else if (req.url.includes("facebook"))
     promisedAccount = authHelper.loginWithFacebook({ code, ipAddress });
   if (promisedAccount) {
