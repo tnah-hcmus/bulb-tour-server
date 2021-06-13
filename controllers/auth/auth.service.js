@@ -75,10 +75,18 @@ async function loginWithGoogle({ idToken, ipAddress }) {
   }
 }
 
-async function loginWithFacebook({ code, ipAddress }) {
+async function loginWithFacebook({ user, ipAddress }) {
   try {
-    const { email, password, name } = await getFacebookUserData(code);
-    return await loginWithThirdParty({ email, password, name, ipAddress });
+    // const { email, password, name } = await getFacebookUserData(code);
+    console.log("ABASD")
+    console.log(user)
+    const saveUser = {
+      email: `${user.id}@facebook.com`,
+      password: user.id,
+      name: user.displayName,
+      ipAddress
+    }
+    return await loginWithThirdParty(saveUser);
   } catch (err) {
     throw err;
   }

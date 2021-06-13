@@ -13,7 +13,7 @@ module.exports = {
   registerSchema,
   register,
   getOAuthInfo,
-  loginWithThirdPartySchema,
+  // loginWithThirdPartySchema,
   loginWithThirdParty,
   verifyEmailSchema,
   verifyEmail,
@@ -24,6 +24,8 @@ module.exports = {
   resetPassword,
   changePasswordSchema,
   changePassword,
+  loginWithGoogleSchema,
+  loginWithFacebookSchema
 };
 
 function authenticateSchema(req, res, next) {
@@ -47,23 +49,31 @@ function authenticate(req, res, next) {
     .catch(next);
 }
 
-function loginWithThirdPartySchema(req, res, next) {
+function loginWithGoogleSchema(req, res, next) {
   const schema = Joi.object({
-    code: Joi.string(),
-    idToken: Joi.string()
+    idToken: Joi.string().required(),
+    // accessToken: Joi.string(),
+  });
+  validateRequest(req, next, schema);
+}
+
+function loginWithFacebookSchema(req, res, next) {
+  const schema = Joi.object({
+    // idToken: Joi.string(),
+    accessToken: Joi.string().required(),
   });
   validateRequest(req, next, schema);
 }
 
 function loginWithThirdParty(req, res, next) {
-  const { code, idToken } = req.body;
+  const {idToken } = req.body;
   const ipAddress = req.ip;
   let promisedAccount = null;
   // console.log("Here")
   if (req.url.includes("google"))
     promisedAccount = authHelper.loginWithGoogle({ idToken, ipAddress });
   else if (req.url.includes("facebook"))
-    promisedAccount = authHelper.loginWithFacebook({ code, ipAddress });
+    promisedAccount = authHelper.loginWithFacebook({user:req.user,ipAddress });
   if (promisedAccount) {
     promisedAccount
       .then((account) => {

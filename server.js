@@ -8,6 +8,8 @@ const errorHandler = require("middleware/error-handler");
 const getUserAgent = require("middleware/user-agent"); //raw agent
 const useragent = require("express-useragent");
 const app = express();
+const FacebookTokenStrategy = require('passport-facebook-token');
+const passport = require("passport");
 app.use(express.static(path.join(__dirname, "public")));
 
 //enable cors for test or 3rd party
@@ -34,7 +36,23 @@ db.sequelize.sync();
    initial();
   });
 */
-
+//Config passport login with facebook token
+passport.use(new FacebookTokenStrategy({
+  clientID: 1107328696343139,
+  clientSecret: "ef51c891c46ccd5191bd2fcfade02681",
+  fbGraphVersion: 'v3.0',
+  accessTokenField: "accessToken",
+}, function(accessToken, refreshToken, profile, done) {
+    return done(null, profile);
+}
+));
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+app.use(passport.initialize());
 // api routes
 app.use("/api/auth", require("routes/auth.routes"));
 app.use("/api/users", require("routes/user.routes"));

@@ -36,6 +36,8 @@
     "ngeohash": "^0.6.3",
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.5.0",
+    "passport": "^0.4.1",
+    "passport-facebook-token": "^4.0.0",
     "path": "^0.12.7",
     "querystring": "^0.2.1",
     "rootpath": "^0.1.2",
