@@ -66,13 +66,18 @@ async function getByHash(hash) {
 async function getNearby({ lat, long }) {
 	try {
 		const level = 6;
-    //config nearby level or nearby distance
+		//config nearby level or nearby distance
 		const neighbors = geohash.neighbors(geohash.encode(lat, long, level));
-    const options = neighbors.map((geoString)={[Op.startsWith]:geoString})
-		const locations = await Location.findAll({ where: { [Op.or]: options } });
+		// console.log(neighbors)
+		const options = neighbors.map((geoString) => ({
+			[Op.startsWith]: geoString,
+		}));
+		const locations = await Location.findAll({
+			where: { hash: { [Op.or]: options } },
+		});
 		return locations;
 	} catch (err) {
-		err;
+		throw err;
 	}
 }
 
