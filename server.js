@@ -37,9 +37,10 @@ db.sequelize.sync();
   });
 */
 //Config passport login with facebook token
+require("dotenv").config();
 passport.use(new FacebookTokenStrategy({
-  clientID: 1107328696343139,
-  clientSecret: "ef51c891c46ccd5191bd2fcfade02681",
+  clientID: process.env.FACEBOOK_CLIENT_ID,
+  clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
   fbGraphVersion: 'v3.0',
   accessTokenField: "accessToken",
 }, function(accessToken, refreshToken, profile, done) {
