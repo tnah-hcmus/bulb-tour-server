@@ -59,7 +59,7 @@ function loginWithThirdParty(req, res, next) {
   const { code, idToken } = req.body;
   const ipAddress = req.ip;
   let promisedAccount = null;
-  console.log("Here")
+  // console.log("Here")
   if (req.url.includes("google"))
     promisedAccount = authHelper.loginWithGoogle({ idToken, ipAddress });
   else if (req.url.includes("facebook"))

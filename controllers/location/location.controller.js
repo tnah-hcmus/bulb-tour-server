@@ -26,7 +26,7 @@ function getNearby(req, res, next) {
   if (!req.user.id && req.user.role !== Role.Admin) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  locationHelper.getNearby(req.body)
+  locationHelper.getNearby(req.query)
       .then(locations => res.json(locations))
       .catch(next);
 }
