@@ -20,7 +20,7 @@ function updatePicturesSchema(req, res, next) {
   const schema = Joi.object({
     operation: Joi.string().required(),
     uploadId: Joi.string().required(),
-    reviewId: Joi.integer().required()
+    reviewId: Joi.number().integer().required()
   });
   validateRequest(req, next, schema);
 }

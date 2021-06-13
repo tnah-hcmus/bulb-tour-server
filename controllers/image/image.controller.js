@@ -48,7 +48,7 @@ function getById(req, res, next) {
 }
 function createSchema(req, res, next) {
   const schema = Joi.object({
-    ownerId: Joi.integer().required(),
+    ownerId: Joi.number().integer().required(),
     bucket: Joi.string().required(),
     key: Joi.string().required(),
     isThumbnail: Joi.boolean(),
