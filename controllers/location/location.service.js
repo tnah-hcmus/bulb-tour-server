@@ -1,6 +1,7 @@
 const { location: Location } = require("models/index");
 const geohash = require("ngeohash");
 const { Op } = require("sequelize");
+require("dotenv").config();
 module.exports = {
 	create,
 	update,
@@ -63,11 +64,12 @@ async function getByHash(hash) {
 	}
 }
 
-async function getNearby({ lat, long }) {
+async function getNearby({ lat, long, lv }) {
 	try {
-		const level = 6;
+		const level = lv||process.env.GEOHASH_LEVEL_NEARBY;
 		//config nearby level or nearby distance
 		const neighbors = geohash.neighbors(geohash.encode(lat, long, level));
+		neighbors.push(geohash.encode(lat, long, level));
 		// console.log(neighbors)
 		const options = neighbors.map((geoString) => ({
 			[Op.startsWith]: geoString,
