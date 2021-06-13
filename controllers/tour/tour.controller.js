@@ -44,7 +44,7 @@ function createSchema(req, res, next) {
     started: Joi.date().required(),
     rating: Joi.number().integer(),
     status: Joi.number().integer(),
-    picture: Joi.string(),
+    pictures: Joi.array(),
     end: Joi.date(),
   });
   validateRequest(req, next, schema);
@@ -64,7 +64,7 @@ function updateSchema(req, res, next) {
     started: Joi.date().empty(/.*/),
     rating: Joi.number().integer(),
     status: Joi.number().integer(),
-    picture: Joi.string(),
+    pictures: Joi.array(),
     end: Joi.date(),
     currentLocation: Joi.number(),
   };

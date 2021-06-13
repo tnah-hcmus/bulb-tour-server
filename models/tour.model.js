@@ -13,8 +13,15 @@ module.exports = (sequelize, Sequelize) => {
         },
       },
     },
-    picture: {
+    pictures: {
       type: Sequelize.STRING,
+      get() {
+        return this.getDataValue("pictures")?.split(";") || [];
+      },
+      set(val) {
+        if (Array.isArray(val)) val = new Set(val);
+        this.setDataValue("pictures", Array.from(val).join(";"));
+      },
     },
     status: {
       //0 in progress, //1 done, //2 interupted
