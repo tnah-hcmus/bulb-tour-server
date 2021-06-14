@@ -135,6 +135,7 @@ async function updateAvatar(req, res, next) {
 function editFavouriteLocationSchema(req, res, next) {
   const schema = Joi.object({
     operation: Joi.string().required(),
+    locationId: Joi.number()
   });
   validateRequest(req, next, schema);
 }
