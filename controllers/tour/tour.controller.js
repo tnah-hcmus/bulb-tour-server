@@ -84,7 +84,7 @@ function update(req, res, next) {
     return res.status(401).json({ message: "Unauthorized" });
   }
   tourHelper
-    .update(req.params.id, req.body, req.user.role === Role.Admin)
+    .update(req.params.id, req.body, req.user.id, req.user.role === Role.Admin)
     .then((tour) => res.json(tour))
     .catch(next);
 }

@@ -45,10 +45,10 @@ async function create(params) {
   }
 }
 
-async function update(id, params, isAdmin) {
+async function update(id, params, requestId, isAdmin) {
   try {
     const tour = await getByTourId(id);
-    if (tour.ownerId === id || isAdmin) {
+    if (tour.ownerId === requestId || isAdmin) {
       // copy params to account and save
       Object.assign(tour, params);
       await tour.save();
