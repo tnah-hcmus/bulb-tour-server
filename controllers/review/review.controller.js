@@ -98,9 +98,9 @@ function updateSchema(req, res, next) {
 }
 
 function update(req, res, next) {
-  if (!req.user.id && req.user.role !== Role.Admin) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
+  // if (!req.user.id && req.user.role !== Role.Admin) {
+  //   return res.status(401).json({ message: "Unauthorized" });
+  // }
   reviewHelper
     .update(req.params.id, req.body, req.user.role === Role.Admin)
     .then((review) => res.json(review))
