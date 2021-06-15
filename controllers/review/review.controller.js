@@ -102,7 +102,7 @@ function update(req, res, next) {
   //   return res.status(401).json({ message: "Unauthorized" });
   // }
   reviewHelper
-    .update(req.params.id, req.body, req.user.role === Role.Admin)
+    .update(req.params.id, req.body, req.user.role === Role.Admin, req.user.id)
     .then((review) => res.json(review))
     .catch(next);
 }

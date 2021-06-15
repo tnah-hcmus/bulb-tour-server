@@ -44,10 +44,10 @@ async function create(params) {
   }
 }
 
-async function update(id, params, isAdmin) {
+async function update(id, params, isAdmin, userId) {
   try {
     const review = await getByReviewId(id);
-    if (review.ownerId === id || isAdmin) {
+    if (review.ownerId === userId || isAdmin) {
       if (!isAdmin && params.rating) {
         if (review.canEditRating) {
           review.canEditRating = false;
