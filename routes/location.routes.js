@@ -4,6 +4,9 @@ const authorize = require("middleware/authorize");
 const Role = require("helper/role");
 const locationController = require("controllers/location/location.controller");
 
+router.route("/search")
+      .get(authorize(), locationController.searchByNameSchema, locationController.searchByName)
+      .post(authorize(), locationController.searchByNameSchema, locationController.searchByName);
 router
   .route("/single/:id")
   .get(authorize(), locationController.getById)

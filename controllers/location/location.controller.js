@@ -4,6 +4,8 @@ const validateRequest = require("middleware/validate-request");
 const Role = require("helper/role");
 
 module.exports = {
+  searchByNameSchema,
+  searchByName,
   getNearbySchema,
   getNearby,
   getById,
@@ -18,6 +20,23 @@ function getNearbySchema(req, res, next) {
   const schema = Joi.object({
     lat: Joi.string().required(),
     long: Joi.string().required()
+  });
+  validateRequest(req, next, schema);
+}
+
+function searchByName(req, res, next) {
+  if (!req.user.id && req.user.role !== Role.Admin) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const search = req.query.search || req.body.search;
+  locationHelper.searchByName({search})
+      .then(locations => res.json(locations))
+      .catch(next);
+}
+
+function searchByNameSchema(req, res, next) {
+  const schema = Joi.object({
+    search: Joi.string().required(),
   });
   validateRequest(req, next, schema);
 }

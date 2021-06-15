@@ -9,6 +9,7 @@ module.exports = {
 	delete: _delete,
 	getByLocationId,
 	getNearby,
+	searchByName
 };
 
 async function create(params) {
@@ -76,6 +77,17 @@ async function getNearby({ lat, long, lv }) {
 		}));
 		const locations = await Location.findAll({
 			where: { hash: { [Op.or]: options } },
+		});
+		return locations;
+	} catch (err) {
+		throw err;
+	}
+}
+
+async function searchByName({search}) {
+	try {
+		const locations = await Location.findAll({
+			where: { name: { [Op.like]:  `%${search}%`} },
 		});
 		return locations;
 	} catch (err) {
