@@ -19,4 +19,11 @@ router
   .route("/")
   .get(authorize(), tourController.getByUserId) //get all tour create by user
   .post(authorize(), tourController.createSchema, tourController.create); //add new tour
+router
+  .route("/generateV2")
+  .post(
+    authorize(),
+    tourController.generateDraftTourSchemaV2,
+    tourController.generateDraftTourV2
+  );
 module.exports = router;

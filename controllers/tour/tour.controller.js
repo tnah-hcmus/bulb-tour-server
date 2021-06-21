@@ -13,6 +13,8 @@ module.exports = {
   delete: _delete,
   generateDraftTourSchema,
   generateDraftTour,
+  generateDraftTourSchemaV2,
+  generateDraftTourV2,
 };
 
 function getByUserId(req, res, next) {
@@ -117,6 +119,28 @@ function generateDraftTourSchema(req, res, next) {
 
 function generateDraftTour(req, res, next) {
   tourHelper.generateDraftTour()
+  .then((tour) => res.json(tour))
+  .catch(next)
+}
+
+
+function generateDraftTourSchemaV2(req, res, next) {
+  const schema = Joi.object({
+    lat: Joi.number().required(),
+    long: Joi.number().required(),
+    maxDistance: Joi.number().required(),
+    nLocation: Joi.number().integer(),
+    goBy: Joi.string().required(),
+    locationTypes: Joi.array(),
+    start: Joi.date(),
+    end: Joi.date(),
+    priotiry: Joi.array(),
+  });
+  validateRequest(req, next, schema);
+}
+
+function generateDraftTourV2(req, res, next) {
+  tourHelper.generateDraftTourV2(req.body)
   .then((tour) => res.json(tour))
   .catch(next)
 }
