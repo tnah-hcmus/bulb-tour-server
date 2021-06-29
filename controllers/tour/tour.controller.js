@@ -135,7 +135,7 @@ function generateDraftTourSchemaV2(req, res, next) {
     locationTypes: Joi.array(),
     // start: Joi.date(),
     // end: Joi.date(),
-    priotiry: Joi.array(),
+    priority: Joi.array(),
   });
   validateRequest(req, next, schema);
 }
