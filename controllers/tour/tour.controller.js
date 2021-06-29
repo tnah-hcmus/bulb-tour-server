@@ -126,14 +126,15 @@ function generateDraftTour(req, res, next) {
 
 function generateDraftTourSchemaV2(req, res, next) {
   const schema = Joi.object({
+    keywords: Joi.array().required(),
     lat: Joi.number().required(),
     long: Joi.number().required(),
     maxDistance: Joi.number().required(),
     nLocation: Joi.number().integer(),
     goBy: Joi.string().required(),
     locationTypes: Joi.array(),
-    start: Joi.date(),
-    end: Joi.date(),
+    // start: Joi.date(),
+    // end: Joi.date(),
     priotiry: Joi.array(),
   });
   validateRequest(req, next, schema);

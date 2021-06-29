@@ -2,6 +2,7 @@ const { tour: Tour } = require("models/index");
 const { location: Location } = require("models/index");
 const geohash = require("ngeohash");
 const { Op } = require("sequelize");
+const {wordScore} = require("helper/words-utils");
 module.exports = {
 	getByUserId,
 	create,
@@ -66,7 +67,7 @@ async function generateDraftTour(param) {
 
 async function generateDraftTourV2(param) {
 	const geoLevelHeight = [4992.6, 624.1, 156, 19.5, 4.9, 0.6094];
-	const nLocation = param.nLocation || 4;
+	let nLocation = param.nLocation || 4;
 	if (param.goBy == "random") return generateDraftTour(param);
 	const mustReturn = param.goBy == "BICYCLE" || param.goBy == "SCOOTER";
 	const r = param.maxDistance / nLocation;
@@ -92,52 +93,108 @@ async function generateDraftTourV2(param) {
 		locations = locations.filter(
 			(location) => distance(location, param) < firstRadius
 		);
+		locations.sort((location1, location2) => wordScore(param.keywords, location2) > wordScore(param.keywords, location1)?1 : -1);
+		//sorting , filtering locations here
+
+
+		//Gen
+		let locationPerStop = Math.floor(locations.length / nLocation);
+		if (nLocation > locations.length) {
+			nLocation = locations.length;
+			locationPerStop = 1;
+		}
+		locationPerStop = Math.min(locationPerStop, 4);
 		let ret = [];
 		let marker = [];
 		for (let i = 0; i < locations.length; i++) marker.push(-1);
-		for (let i = 0; i < nLocation; i++) {
-			let thisLv = [];
-			if (i == 0) {
-				//Stop1 lấy tất cả xung quanh bán kính R đang đứng
-				for (let j = 0; j < locations.length; j++) {
-					if (distance(locations[j], param) < r) {
-						thisLv.push(locations[j]);
-						marker[j] = 0;
-						if (thisLv.length == 4) break;
+		if (!mustReturn) {
+			for (let i = 0; i < nLocation; i++) {
+				let thisLv = [];
+				if (i == 0) {
+					//Stop1 lấy tất cả xung quanh bán kính R đang đứng
+					for (let j = 0; j < locations.length; j++) {
+						if (distance(locations[j], param) < r) {
+							thisLv.push(locations[j]);
+							marker[j] = 0;
+							if (thisLv.length == locationPerStop) break;
+						}
+					}
+				} else {
+					let preLv = ret[ret.length - 1];
+					for (let j = 0; j < preLv.length; j++) {
+						for (let t = 0; t < locations.length; t++) {
+							if (
+								marker[t] < 0 &&
+								distance(locations[t], preLv[j]) < r &&
+								distance(param, locations[t]) >
+									distance(param, preLv[j])
+							) {
+								thisLv.push(locations[t]);
+								marker[t] = 0;
+								if (thisLv.length == locationPerStop) break;
+							}
+						}
 					}
 				}
-			} else {
-				let preLv = ret[ret.length - 1];
-				for (let j = 0; j < preLv.length; j++) {
-					for (let t = 0; t < locations.length; t++) {
-						//Nếu điểm trong location chưa được chọn và nằm trong bán kính R bất đầu bới 1 điểm trong list stop trước
-						// if(marker[t]<0) console.log(distance(locations[t], preLv[j]));
-						if (
-							marker[t] < 0 &&
-							distance(locations[t], preLv[j]) < r
-						) {
-							//Tính độ chéo
-							let de = degree(locations[t], preLv[j], param);
-							//nếu không phải tại điểm quay đầu mà quay đầu thì bỏ quá
-							// if(!(mustReturn && i==Math.floor(nLocation/2) && de<60)) continue;
-							//Nếu không đi ra xa thì bỏ qua
-							// if(de <= 90) continue;
-							thisLv.push(locations[t]);
-							marker[t] = 0;
-							if (thisLv.length == 4) break;
+				ret.push(thisLv);
+			}
+		} else {
+			//Must return
+			for (let i = 0; i < nLocation / 2; i++) {
+				let thisLv = [];
+				if (i == 0) {
+					//Stop1 lấy tất cả xung quanh bán kính R đang đứng
+					for (let j = 0; j < locations.length; j++) {
+						if (distance(locations[j], param) < r) {
+							thisLv.push(locations[j]);
+							marker[j] = 0;
+							if (thisLv.length == locationPerStop * 2) break;
+						}
+					}
+				} else {
+					let preLv = ret[ret.length - 1];
+					for (let j = 0; j < preLv.length; j++) {
+						for (let t = 0; t < locations.length; t++) {
+							if (
+								marker[t] < 0 &&
+								distance(locations[t], preLv[j]) < r &&
+								distance(param, locations[t]) >
+									distance(param, preLv[j])
+							) {
+								thisLv.push(locations[t]);
+								marker[t] = 0;
+								if (thisLv.length == locationPerStop * 2) break;
+							}
+						}
+					}
+				}
+				ret.push(thisLv);
+			}
+			for (let i = Math.ceil(nLocation / 2); i < nLocation; i++) {
+				let len = nLocation;
+				let count = Math.floor(ret[len - 1 - i].length / 2);
+				let newLv = ret[len - 1 - i].splice(count, count);
+				ret.push(newLv);
+			}
+		}
+		//fill to location per stop with rest
+		let rest = [];
+		for (let i = 0; i < ret.length; i++) {
+			if (ret[i].length < locationPerStop) {
+				rest.push(i);
+			}
+		}
+		if (rest.length > 0)
+			for (let i = 0; i < marker.length; i++) {
+				if (marker[i] == -1) {
+					for (let j = 0; j < rest.length; j++) {
+						if (ret[rest[j]].length < locationPerStop) {
+							ret[rest[j]].push(locations[i]);
+							marker[i] = 0;
 						}
 					}
 				}
 			}
-			ret.push(thisLv);
-		}
-		// let randomLv = [];
-		// for (let i = 0; i < marker.length; i++) {
-		// 	if (marker[i] == -1) {
-		// 		randomLv.push(locations[i]);
-		// 	}
-		// }
-		// ret.push(randomLv);
 		return ret;
 	} catch (err) {
 		throw err;
