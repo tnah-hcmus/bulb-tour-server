@@ -191,6 +191,7 @@ async function generateDraftTourV2(param) {
 						if (ret[rest[j]].length < locationPerStop) {
 							ret[rest[j]].push(locations[i]);
 							marker[i] = 0;
+							break;
 						}
 					}
 				}
